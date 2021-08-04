@@ -37,6 +37,18 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
+	<!-- Start camera permission-->
+	<key>NSCameraUsageDescription</key>
+	<string>Need camera access for uploading images</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<!-- End camera permissions -->
+	<!--<key>NSMicrophoneUsageDescription</key>
+	<string>Need microphone access for uploading videos</string>
+	<string>Need photo library access for uploading images</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Need location access for updating nearby friends</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app will use your location to show cool stuffs near you.</string> -->
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

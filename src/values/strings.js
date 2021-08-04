@@ -3,4 +3,5 @@ export const Strings = {
 
     /* Application Stacks */
     component_main: "MainComponent", //Route to Main Component
+    screen_process_image: "Process Image",
 }
