@@ -41,10 +41,10 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access for uploading images</string>
 	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need photo library access for uploading images</string>
 	<!-- End camera permissions -->
 	<!--<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading videos</string>
-	<string>Need photo library access for uploading images</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Need location access for updating nearby friends</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
