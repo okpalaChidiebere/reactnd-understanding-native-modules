@@ -17,7 +17,12 @@ export function ProcessImageScreen({ route }) {
 
     const proccessImage = async (url) => {
         if(url){
-            recognizeImage(url)
+            try{
+                const response = await recognizeImage(url)
+                console.log(response)
+            }catch(e){
+                console.log(e)
+            }
         }
     }
 
