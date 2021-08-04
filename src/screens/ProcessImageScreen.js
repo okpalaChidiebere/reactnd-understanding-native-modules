@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Image, useWindowDimensions, ScrollView, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { recognizeImage } from "../mlkit"
 import { Colors, Strings } from "../values"
 
 export function ProcessImageScreen({ route }) {
@@ -15,7 +16,9 @@ export function ProcessImageScreen({ route }) {
     }, [uri])
 
     const proccessImage = async (url) => {
-
+        if(url){
+            recognizeImage(url)
+        }
     }
 
     return (
