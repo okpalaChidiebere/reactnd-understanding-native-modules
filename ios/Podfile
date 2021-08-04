@@ -9,6 +9,8 @@ target 'reactndunderstandingnativemodules' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+  
+  pod 'GoogleMLKit/TextRecognition' #install pod dependency for Text Recognition
 
   # Uncomment to opt-in to using Flipper
   #
