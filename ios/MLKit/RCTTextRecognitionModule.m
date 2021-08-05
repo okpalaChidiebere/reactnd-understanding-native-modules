@@ -23,8 +23,22 @@
 // To export a module named RCTCalendarModule
 RCT_EXPORT_MODULE(TextRecognitionModule /*this name must match what you will inport in JS as the native module*/);
 
+//defining our helper function like we did in Java Android
+- (NSMutableDictionary *)getFrameDictionary:(CGRect)frame {
+  NSMutableDictionary *rect = [NSMutableDictionary dictionary];
+  
+  [rect setValue:[NSNumber numberWithFloat:frame.origin.x] forKey:@"left"];
+  [rect setValue:[NSNumber numberWithFloat:frame.origin.y] forKey:@"top"];
+  [rect setValue:[NSNumber numberWithFloat:frame.size.width] forKey:@"width"];
+  [rect setValue:[NSNumber numberWithFloat:frame.size.height] forKey:@"height"];
+  
+  return rect;
+}
+
 /* creating the native method that you will invoke in JS **/
-RCT_EXPORT_METHOD(recognizeImage:(NSString *)url)
+RCT_EXPORT_METHOD(recognizeImage:(NSString *)url
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
   /**
    @" "  means " " like in JavaScript
@@ -55,20 +69,44 @@ RCT_EXPORT_METHOD(recognizeImage:(NSString *)url)
                                  NSError *_Nullable error) {
     if (error != nil || result == nil) {
       // Error handling
+      reject(@"text_recognition", @"text recognition is failed", nil);
       return;
     }
+    
+    /*
+     Create the map
+     Maps are similar to Objects in JavaScript
+     Learn more here https://reactnative.dev/docs/native-modules-ios#argument-types
+     **/
+    NSMutableDictionary *response = [NSMutableDictionary dictionary];
+    
+    [response setValue:[NSNumber numberWithInt:img.size.width] forKey:@"width"];
+    [response setValue:[NSNumber numberWithInt:img.size.height] forKey:@"height"];
+    
+    NSMutableArray *blocks = [NSMutableArray array];
     // Recognized text
-    NSString *resultText = result.text;
+    //NSString *resultText = result.text;
     for (MLKTextBlock *block in result.blocks) {
-      NSString *blockText = block.text;
+      /*NSString *blockText = block.text;
       NSArray<MLKTextRecognizedLanguage *> *blockLanguages = block.recognizedLanguages;
       NSArray<NSValue *> *blockCornerPoints = block.cornerPoints;
-      CGRect blockFrame = block.frame;
+      CGRect blockFrame = block.frame;*/
+      NSMutableDictionary *blockObject = [NSMutableDictionary dictionary];
+      [blockObject setValue:block.text forKey:@"blockText"];
+      [blockObject setValue:[self getFrameDictionary:block.frame] forKey:@"blockFrame"];
+      
+      NSMutableArray *lines = [NSMutableArray array];
       for (MLKTextLine *line in block.lines) {
-        NSString *lineText = line.text;
+        /*NSString *lineText = line.text;
         NSArray<MLKTextRecognizedLanguage *> *lineLanguages = line.recognizedLanguages;
         NSArray<NSValue *> *lineCornerPoints = line.cornerPoints;
-        CGRect lineFrame = line.frame;
+        CGRect lineFrame = line.frame;*/
+        NSMutableDictionary *lineObject = [NSMutableDictionary dictionary];
+        [lineObject setValue:line.text forKey:@"lineText"];
+        [lineObject setValue:[self getFrameDictionary:line.frame] forKey:@"lineFrame"];
+        
+        [lines addObject:lineObject];
+        
         /**
         we choose to ignore the elements  like in Java
          
@@ -80,7 +118,13 @@ RCT_EXPORT_METHOD(recognizeImage:(NSString *)url)
          }
          */
       }
+      [blockObject setValue:lines forKey:@"lines"];
+      [blocks addObject:blockObject];
     }
+    
+    [response setValue:blocks forKey:@"blocks"];
+    //resolve(@[]); //means you returned an empty data
+    resolve(response);
   }];
   
 }
